@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ profile.name }} | {{ profile.title }}</title>
+    <meta name="description" content="{{ profile.profile_summary|truncatewords:30 }}">
+    <meta name="keywords" content="Data Analytics, Python Developer, Data Science, Power BI, SQL">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">Portfolio<span>.</span></a>
+            <div class="nav-menu" id="nav-menu">
+                <a href="#home" class="nav-link active">Home</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#skills" class="nav-link">Skills</a>
+                <a href="#projects" class="nav-link">Projects</a>
+                <a href="#education" class="nav-link">Education</a>
+                <a href="#certificates" class="nav-link">Certificates</a>
+                <a href="#contact" class="nav-link">Contact</a>
+            </div>
+            <div class="hamburger" id="hamburger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero-section">
+        <div class="hero-container">
+            <div class="hero-content">
+                <p class="hero-greeting">Hello, It's Me</p>
+                <h1 class="hero-name">{{ profile.name }}</h1>
+                <p class="hero-title">And I'm a <span class="highlight">{{ profile.title }}</span></p>
+                <p class="hero-description">{{ profile.profile_summary|truncatewords:40 }}</p>
+                
+                <!-- Social Links -->
+                <div class="social-links">
+                    {% for link in social_links %}
+                    <a href="{{ link.url }}" target="_blank" class="social-link" title="{{ link.get_platform_display }}">
+                        <i class="{{ link.icon_class }}"></i>
+                    </a>
+                    {% empty %}
+                    <a href="{{ profile.linkedin }}" target="_blank" class="social-link" title="LinkedIn">
+                        <i class="fab fa-linkedin-in"></i>
+                    </a>
+                    <a href="https://github.com/" target="_blank" class="social-link" title="GitHub">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="mailto:{{ profile.email }}" class="social-link" title="Email">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    {% endfor %}
+                </div>
+                
+                <!-- CTA Buttons -->
+                <div class="cta-buttons">
+                    {% if profile.resume %}
+                    <a href="{{ profile.resume.url }}" class="btn btn-primary" download>
+                        <i class="fas fa-download"></i> Download CV
+                    </a>
+                    {% else %}
+                    <a href="#contact" class="btn btn-primary">
+                        <i class="fas fa-envelope"></i> Contact Me
+                    </a>
+                    {% endif %}
+                    <a href="#projects" class="btn btn-secondary">
+                        <i class="fas fa-briefcase"></i> View Projects
+                    </a>
+                </div>
+            </div>
+            
+            <!-- Hero Image -->
+            <div class="hero-image">
+                <div class="hexagon-border">
+                    {% if profile.profile_image %}
+                    <img src="{{ profile.profile_image.url }}" alt="{{ profile.name }}">
+                    {% else %}
+                    <div class="profile-placeholder">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Scroll Down Indicator -->
+        <div class="scroll-down">
+            <a href="#about">
+                <i class="fas fa-chevron-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="section">
+        <div class="container">
+            <h2 class="section-title">About <span class="highlight">Me</span></h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>{{ profile.profile_summary }}</p>
+                    <div class="about-info">
+                        <div class="info-item">
+                            <i class="fas fa-user"></i>
+                            <span><strong>Name:</strong> {{ profile.name }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-envelope"></i>
+                            <span><strong>Email:</strong> {{ profile.email }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-phone"></i>
+                            <span><strong>Phone:</strong> {{ profile.phone }}</span>
+                        </div>
+                        <div class="info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span><strong>Location:</strong> {{ profile.location }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Skills Section -->
+    <section id="skills" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Technical <span class="highlight">Skills</span></h2>
+            <div class="skills-container">
+                {% for category, category_skills in skills_by_category.items %}
+                <div class="skill-category">
+                    <h3 class="category-title">{{ category }}</h3>
+                    <div class="skills-grid">
+                        {% for skill in category_skills %}
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                {% if skill.icon %}
+                                <i class="{{ skill.icon }}"></i>
+                                {% endif %}
+                                <span class="skill-name">{{ skill.name }}</span>
+                                <span class="skill-percent">{{ skill.proficiency }}%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: {{ skill.proficiency }}%"></div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% empty %}
+                <!-- Default skills if none in database -->
+                <div class="skill-category">
+                    <h3 class="category-title">Programming Languages</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fab fa-python"></i>
+                                <span class="skill-name">Python</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-database"></i>
+                                <span class="skill-name">SQL</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="category-title">Data Analysis</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-chart-bar"></i>
+                                <span class="skill-name">Pandas</span>
+                                <span class="skill-percent">88%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 88%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-calculator"></i>
+                                <span class="skill-name">NumPy</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-chart-line"></i>
+                                <span class="skill-name">Matplotlib</span>
+                                <span class="skill-percent">82%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 82%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-chart-pie"></i>
+                                <span class="skill-name">Seaborn</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="category-title">Visualization Tools</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-chart-area"></i>
+                                <span class="skill-name">Power BI</span>
+                                <span class="skill-percent">85%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 85%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-table"></i>
+                                <span class="skill-name">Excel</span>
+                                <span class="skill-percent">80%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 80%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="skill-category">
+                    <h3 class="category-title">Tools & Platforms</h3>
+                    <div class="skills-grid">
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fab fa-git-alt"></i>
+                                <span class="skill-name">Git</span>
+                                <span class="skill-percent">75%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 75%"></div>
+                            </div>
+                        </div>
+                        <div class="skill-item">
+                            <div class="skill-header">
+                                <i class="fas fa-book"></i>
+                                <span class="skill-name">Jupyter Notebook</span>
+                                <span class="skill-percent">90%</span>
+                            </div>
+                            <div class="skill-bar">
+                                <div class="skill-progress" style="width: 90%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects" class="section">
+        <div class="container">
+            <h2 class="section-title">My <span class="highlight">Projects</span></h2>
+            <div class="projects-grid">
+                {% for project in projects %}
+                <div class="project-card">
+                    <div class="project-image">
+                        {% if project.image %}
+                        <img src="{{ project.image.url }}" alt="{{ project.title }}">
+                        {% else %}
+                        <div class="project-placeholder">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        {% endif %}
+                        {% if project.is_featured %}
+                        <span class="featured-badge"><i class="fas fa-star"></i> Featured</span>
+                        {% endif %}
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">{{ project.title }}</h3>
+                        <p class="project-description">{{ project.description|truncatewords:25 }}</p>
+                        <div class="project-tech">
+                            {% for tech in project.get_technologies_list %}
+                            <span class="tech-tag">{{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                        <div class="project-links">
+                            {% if project.github_link %}
+                            <a href="{{ project.github_link }}" target="_blank" class="project-link">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                            {% endif %}
+                            {% if project.live_link %}
+                            <a href="{{ project.live_link }}" target="_blank" class="project-link">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% empty %}
+                <!-- Default projects if none in database -->
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Power BI Company Sales Report</h3>
+                        <p class="project-description">Cleaned and transformed raw sales data using Power Query. Designed interactive charts and visuals to analyze sales performance. Built a dynamic dashboard to track key metrics and identify trends.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Power BI</span>
+                            <span class="tech-tag">Power Query</span>
+                            <span class="tech-tag">DAX</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-image">
+                        <div class="project-placeholder">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                    </div>
+                    <div class="project-content">
+                        <h3 class="project-title">Gmail Fraud Detection Analyst</h3>
+                        <p class="project-description">Monitored and investigated Gmail-related fraud activities including phishing, account takeover (ATO), spoofing, and business email compromise (BEC) through log analysis, IP tracking, and behavioral anomaly detection.</p>
+                        <div class="project-tech">
+                            <span class="tech-tag">Threat Intelligence</span>
+                            <span class="tech-tag">Log Analysis</span>
+                            <span class="tech-tag">SPF/DKIM/DMARC</span>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Education Section -->
+    <section id="education" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">My <span class="highlight">Education</span></h2>
+            <div class="timeline">
+                {% for edu in education %}
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3 class="timeline-title">{{ edu.degree }}</h3>
+                            {% if edu.is_current %}
+                            <span class="current-badge">Currently Pursuing</span>
+                            {% endif %}
+                        </div>
+                        <p class="timeline-institution">
+                            <i class="fas fa-university"></i> {{ edu.institution }}
+                        </p>
+                        <p class="timeline-location">
+                            <i class="fas fa-map-marker-alt"></i> {{ edu.location }}
+                        </p>
+                        <p class="timeline-date">
+                            <i class="fas fa-calendar-alt"></i> 
+                            {{ edu.start_date|date:"M Y" }} - 
+                            {% if edu.end_date %}{{ edu.end_date|date:"M Y" }}{% else %}Present{% endif %}
+                        </p>
+                        {% if edu.description %}
+                        <p class="timeline-description">{{ edu.description }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <!-- Default education if none in database -->
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3 class="timeline-title">B-Tech Artificial Intelligence and Data Science</h3>
+                            <span class="current-badge">Currently Pursuing</span>
+                        </div>
+                        <p class="timeline-institution">
+                            <i class="fas fa-university"></i> JCT College of Engineering and Technology | Anna University
+                        </p>
+                        <p class="timeline-location">
+                            <i class="fas fa-map-marker-alt"></i> Pichanur, Tamil Nadu
+                        </p>
+                        <p class="timeline-date">
+                            <i class="fas fa-calendar-alt"></i> Sep 2022 - Present
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3 class="timeline-title">Higher Secondary Education</h3>
+                        </div>
+                        <p class="timeline-institution">
+                            <i class="fas fa-university"></i> GHSS Mankara
+                        </p>
+                        <p class="timeline-location">
+                            <i class="fas fa-map-marker-alt"></i> Palakkad, Kerala
+                        </p>
+                        <p class="timeline-date">
+                            <i class="fas fa-calendar-alt"></i> Jun 2020 - May 2022
+                        </p>
+                    </div>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-marker"></div>
+                    <div class="timeline-content">
+                        <div class="timeline-header">
+                            <h3 class="timeline-title">SSLC</h3>
+                        </div>
+                        <p class="timeline-institution">
+                            <i class="fas fa-university"></i> Seva Sadan Central School
+                        </p>
+                        <p class="timeline-location">
+                            <i class="fas fa-map-marker-alt"></i> Palakkad, Kerala
+                        </p>
+                        <p class="timeline-date">
+                            <i class="fas fa-calendar-alt"></i> Apr 2020
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Certificates Section -->
+    <section id="certificates" class="section">
+        <div class="container">
+            <h2 class="section-title">My <span class="highlight">Certificates</span></h2>
+            <div class="certificates-grid">
+                {% for cert in certificates %}
+                <div class="certificate-card">
+                    <div class="certificate-icon">
+                        <i class="fas fa-certificate"></i>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">{{ cert.title }}</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-building"></i> {{ cert.issuing_organization }}
+                        </p>
+                        {% if cert.issue_date %}
+                        <p class="certificate-date">
+                            <i class="fas fa-calendar-alt"></i> {{ cert.issue_date|date:"F Y" }}
+                        </p>
+                        {% endif %}
+                        {% if cert.skills_gained %}
+                        <p class="certificate-skills">
+                            <strong>Skills:</strong> {{ cert.skills_gained }}
+                        </p>
+                        {% endif %}
+                        {% if cert.credential_url %}
+                        <a href="{{ cert.credential_url }}" target="_blank" class="certificate-link">
+                            <i class="fas fa-external-link-alt"></i> View Credential
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+                {% empty %}
+                <!-- Default certificates if none in database -->
+                <div class="certificate-card">
+                    <div class="certificate-icon">
+                        <i class="fab fa-google"></i>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">Tools of the Trade: Linux and SQL</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-building"></i> Google
+                        </p>
+                        <p class="certificate-skills">
+                            <strong>Skills:</strong> SQL, Linux CLI, Cloud VM usage
+                        </p>
+                    </div>
+                </div>
+                <div class="certificate-card">
+                    <div class="certificate-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="certificate-content">
+                        <h3 class="certificate-title">Tata Data Visualisation: Empowering Business with Effective Insights</h3>
+                        <p class="certificate-issuer">
+                            <i class="fas fa-building"></i> Tata Consultancy Services
+                        </p>
+                        <p class="certificate-skills">
+                            <strong>Skills:</strong> Data Visualization, Decision Making, Business Analysis
+                        </p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="section section-alt">
+        <div class="container">
+            <h2 class="section-title">Contact <span class="highlight">Me</span></h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3>Get in Touch</h3>
+                    <p>Feel free to reach out for collaborations, opportunities, or just a friendly chat!</p>
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <div>
+                                <h4>Email</h4>
+                                <a href="mailto:{{ profile.email }}">{{ profile.email }}</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h4>Phone</h4>
+                                <a href="tel:{{ profile.phone }}">{{ profile.phone }}</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h4>Location</h4>
+                                <span>{{ profile.location }}</span>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-linkedin"></i>
+                            <div>
+                                <h4>LinkedIn</h4>
+                                <a href="{{ profile.linkedin }}" target="_blank">{{ profile.linkedin }}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-container">
+                    <form id="contact-form" class="contact-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="name">Your Name</label>
+                            <input type="text" id="name" name="name" required placeholder="John Doe">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required placeholder="john@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required placeholder="Project Collaboration">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required placeholder="Your message here..."></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-submit">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                    <div id="form-status" class="form-status"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <span>Portfolio<span>.</span></span>
+                </div>
+                <div class="footer-social">
+                    {% for link in social_links %}
+                    <a href="{{ link.url }}" target="_blank"><i class="{{ link.icon_class }}"></i></a>
+                    {% empty %}
+                    <a href="{{ profile.linkedin }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="https://github.com/" target="_blank"><i class="fab fa-github"></i></a>
+                    <a href="mailto:{{ profile.email }}"><i class="fas fa-envelope"></i></a>
+                    {% endfor %}
+                </div>
+                <p class="footer-text">
+                    &copy; {% now "Y" %} {{ profile.name }}. All rights reserved.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#home" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <!-- JavaScript -->
+    <script src="/static/js/main.js"></script>
+</body>
+</html>
