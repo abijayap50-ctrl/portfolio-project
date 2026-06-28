@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<div class="admin-topbar"><div><h1>Media Manager</h1><p>Upload and manage images, PDFs, and portfolio assets.</p></div></div>
+<section class="admin-panel">
+        <form class="admin-form" method="post" enctype="multipart/form-data"><input type="hidden" name="_csrf_token" value="{{ csrf_token }}"><div class="field"><label for="file">File</label><input id="file" name="file" type="file" required></div><div class="field"><label for="alt_text">Alt Text</label><input id="alt_text" name="alt_text"></div><div class="form-actions"><button class="btn btn-primary" type="submit">Upload</button></div></form>
+</section>
+<section class="admin-panel">
+        <table class="admin-table"><thead><tr><th>Name</th><th>Type</th><th>Size</th><th>Path</th><th>Actions</th></tr></thead><tbody>{% for file in files %}<tr><td>{{ file.original_name }}</td><td>{{ file.file_type }}</td><td>{{ file.file_size }}</td><td><a href="{{ file.file_path }}" target="_blank">{{ file.file_path }}</a></td><td><form method="post" action="/admin/media/{{ file.id }}/delete"><input type="hidden" name="_csrf_token" value="{{ csrf_token }}"><button class="btn" type="submit">Delete</button></form></td></tr>{% else %}<tr><td colspan="5">No files uploaded yet.</td></tr>{% endfor %}</tbody></table>
+</section>
+{% endblock %}

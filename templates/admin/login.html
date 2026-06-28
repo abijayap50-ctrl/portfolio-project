@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', path='css/style.css') }}">
+</head>
+<body class="login-page">
+    <form class="login-card" method="post" action="/login">
+        <h1>Super User Login</h1>
+        <p>Manage portfolio content securely.</p>
+        {% if error %}<p class="alert">{{ error }}</p>{% endif %}
+        <div class="field"><label for="email">Email</label><input id="email" name="email" type="email" required autofocus></div>
+        <div class="field"><label for="password">Password</label><input id="password" name="password" type="password" required></div>
+        <button class="btn btn-primary" type="submit">Login</button>
+    </form>
+</body>
+</html>

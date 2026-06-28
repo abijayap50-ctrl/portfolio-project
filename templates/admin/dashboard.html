@@ -1,0 +1,10 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<div class="admin-topbar"><div><h1>Dashboard</h1><p>Manage all portfolio sections from one place.</p></div><a class="btn btn-primary" href="/admin/projects/new">New Project</a></div>
+<section class="metric-grid">{% for label, value in counts.items() %}<article class="metric-card"><span>{{ label }}</span><strong>{{ value }}</strong></article>{% endfor %}</section>
+<section class="admin-panel"><div class="toolbar"><h2>Quick Actions</h2></div><div class="quick-links">{% for slug, resource in resources.items() %}<a class="btn" href="/admin/{{ slug }}/new">Add {{ resource.label }}</a>{% endfor %}</div></section>
+<section class="grid-2">
+    <div class="admin-panel"><h2>Recent Activities</h2><ul class="recent-list">{% for item in recent %}<li><span>{{ item.action }}</span><small>{{ item.created_at }}</small></li>{% else %}<li>No activity yet.</li>{% endfor %}</ul></div>
+    <div class="admin-panel"><h2>Recent Messages</h2><ul class="recent-list">{% for item in messages %}<li><span>{{ item.name }}: {{ item.message[:80] }}</span><small>{{ item.email }}</small></li>{% else %}<li>No messages yet.</li>{% endfor %}</ul></div>
+</section>
+{% endblock %}

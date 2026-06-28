@@ -1,0 +1,178 @@
+{% extends "base.html" %}
+{% block title %}{{ profile.full_name }} | {{ profile.professional_title }}{% endblock %}
+{% block body %}
+<header class="site-header">
+    <nav class="nav" aria-label="Main navigation">
+        <a class="brand" href="#home">
+            <span class="brand-mark">{{ profile.full_name[:2] }}</span>
+            <span class="brand-text"><span>{{ profile.full_name }}</span><span>{{ profile.professional_title }}</span></span>
+        </a>
+        <div class="nav-links" id="nav-links">
+            <a href="#about">About</a><a href="#education">Education</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#experience">Experience</a><a href="#certificates">Certificates</a><a href="#contact">Contact</a>
+        </div>
+        <div class="header-actions">
+            <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle dark and light mode">Dark</button>
+            <a class="btn btn-primary" href="{{ profile.cta_secondary_url }}">Resume</a>
+            <button class="menu-toggle" type="button" aria-controls="nav-links" aria-expanded="false">Menu</button>
+        </div>
+    </nav>
+</header>
+
+<main>
+    <section class="hero" id="home">
+        {% if profile.hero_background_image and profile.hero_background_image.endswith('.mp4') %}
+        <video class="hero-video" src="{{ profile.hero_background_image }}" autoplay muted loop playsinline></video>
+        {% endif %}
+        <div class="hero-inner">
+            <div>
+                <p class="eyebrow">{{ profile.hero_subheading }}</p>
+                <h1>{{ profile.hero_heading }}</h1>
+                <p class="hero-copy">{{ profile.hero_description }}</p>
+                <div class="hero-actions">
+                    <a class="btn btn-primary" href="{{ profile.cta_primary_url }}">{{ profile.cta_primary_label }}</a>
+                    <a class="btn" href="{{ profile.cta_secondary_url }}">{{ profile.cta_secondary_label }}</a>
+                </div>
+            </div>
+            <aside class="profile-panel reveal">
+                <h2>{{ profile.full_name }}</h2>
+                <p>{{ profile.professional_title }}</p>
+                <ul class="info-list">
+                    <li><strong>Email</strong><span>{{ profile.contact_email }}</span></li>
+                    <li><strong>Phone</strong><span>{{ profile.phone_number }}</span></li>
+                    <li><strong>Location</strong><span>{{ profile.location }}</span></li>
+                    <li><strong>Focus</strong><span>{{ profile.career_summary }}</span></li>
+                </ul>
+            </aside>
+        </div>
+    </section>
+
+    <section class="section alt" id="about">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal">
+                <div><p class="section-label">About Me</p><h2>{{ profile.about_heading }}</h2></div>
+                <p class="section-text">{{ profile.about_content }}</p>
+            </div>
+            <div class="flow-grid">
+                <article class="flow-panel reveal"><h3>Profile</h3><p>{{ profile.about_me }}</p></article>
+                <article class="flow-panel reveal">
+                    <h3>Career Objective</h3>
+                    <p>{{ profile.career_summary }}</p>
+                    <div class="stat-strip">
+                        {% for line in profile.personal_details.split('\n')[:3] %}
+                        {% set parts = line.split(':', 1) %}
+                        <div><strong>{{ parts[1].strip() if parts|length > 1 else line }}</strong><span>{{ parts[0].strip() if parts|length > 1 else "Detail" }}</span></div>
+                        {% endfor %}
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="education">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Education</p><h2>Branched academic journey.</h2></div><p class="section-text">{{ profile.education_summary }}</p></div>
+            <div class="education-branch">
+                {% for item in education %}
+                <article class="edu-node reveal">
+                    <div class="edu-card">
+                        <h3>{{ item.degree }}{% if item.field_of_study %} {{ item.field_of_study }}{% endif %}</h3>
+                        <p class="edu-meta">{{ item.institution_name }}{% if item.description %} | {{ item.description }}{% endif %}</p>
+                        <p class="section-text">{{ item.start_date or "" }}{% if item.end_date %} - {{ item.end_date }}{% endif %}{% if item.location %} | {{ item.location }}{% endif %}</p>
+                    </div>
+                    <div class="edu-dot">{{ item.badge or loop.index }}</div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="section alt" id="skills">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Skills</p><h2>Skills mapped around backend development.</h2></div><p class="section-text">Technical strengths organized for quick recruiter scanning.</p></div>
+            <div class="skill-map">
+                {% for category, items in grouped_skills.items() %}
+                <article class="flow-panel reveal">
+                    <h3>{{ category }}</h3>
+                    <div class="tag-list">{% for skill in items %}<span class="tag">{{ skill.name }}{% if skill.percentage %} · {{ skill.percentage }}%{% endif %}</span>{% endfor %}</div>
+                </article>
+                {% if loop.first %}<div class="skill-center reveal"><div><strong>AI + Backend</strong><p class="section-text">Building APIs, automations, and data-driven systems.</p></div></div>{% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="section" id="projects">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Projects</p><h2>Project showcase.</h2></div><p class="section-text">Projects automatically loaded from the admin dashboard.</p></div>
+            <div class="project-path">
+                {% for project in projects %}
+                <article class="project-card project-node reveal" data-step="{{ '%02d' % loop.index }}">
+                    <div class="project-top">{% if project.project_image %}<img src="{{ project.project_image }}" alt="{{ project.title }}">{% else %}<span>{{ project.title }}</span>{% endif %}</div>
+                    <div class="project-body">
+                        <h3>{{ project.title }}</h3>
+                        <p>{{ project.description }}</p>
+                        <div class="tag-list">{% for tech in project.technologies_used|tags %}<span class="tag">{{ tech }}</span>{% endfor %}</div>
+                        {% if project.detailed_description %}<ul class="feature-list">{% for line in project.detailed_description.split('\n') %}<li>{{ line }}</li>{% endfor %}</ul>{% endif %}
+                        <div class="card-actions">{% if project.github_url %}<a class="btn" href="{{ project.github_url }}" target="_blank" rel="noreferrer">GitHub</a>{% endif %}{% if project.live_demo_url %}<a class="btn" href="{{ project.live_demo_url }}" target="_blank" rel="noreferrer">Live Demo</a>{% endif %}</div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="section alt" id="experience">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Experience</p><h2>Practical exposure and role readiness.</h2></div><p class="section-text">Experience entries update from the dashboard.</p></div>
+            {% for item in experience %}
+            <div class="experience-rail reveal"><div class="rail-label">{{ item.employment_type or "Role" }}</div><article class="flow-panel"><h3>{{ item.job_title }} | {{ item.company_name }}</h3><p class="section-text">{{ item.start_date or "" }}{% if item.end_date %} - {{ item.end_date }}{% endif %}</p><p>{{ item.description }}</p><ul class="feature-list">{% for line in item.responsibilities.split('\n') if line %}<li>{{ line }}</li>{% endfor %}</ul></article></div>
+            {% endfor %}
+        </div>
+    </section>
+
+    <section class="section" id="certificates">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Certifications</p><h2>Certificate gallery.</h2></div><p class="section-text">Certificates appear here as soon as the admin publishes them.</p></div>
+            <div class="certificate-gallery">
+                {% for cert in certificates %}
+                <article class="certificate-card reveal"><h3>{{ cert.certificate_name }}</h3><p>Issuer: {{ cert.issuing_organization }}</p><div class="tag-list">{% for tag in cert.skills|tags %}<span class="tag">{{ tag }}</span>{% endfor %}</div><div class="card-actions" style="margin-top: 18px;">{% if cert.verification_url %}<a class="btn" href="{{ cert.verification_url }}" target="_blank" rel="noreferrer">Verify</a>{% endif %}{% if cert.certificate_pdf %}<a class="btn" href="{{ cert.certificate_pdf }}">PDF</a>{% endif %}</div></article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="section alt" id="achievements">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Achievements</p><h2>Signals recruiters can verify.</h2></div><p class="section-text">Achievements, awards, and milestones managed dynamically.</p></div>
+            <div class="grid-2"><ul class="list-stack reveal">{% for item in achievements %}<li class="achievement-item">{{ item.title }}: {{ item.description }}</li>{% endfor %}</ul><div class="flow-panel reveal"><h3>Coding Profiles</h3><div class="quick-links">{% for link in social_links %}<a class="profile-link" href="{{ link.url }}" target="_blank" rel="noreferrer"><strong>{{ link.platform }}</strong><span>{{ link.url }}</span></a>{% endfor %}</div></div></div>
+        </div>
+    </section>
+
+    <section class="section" id="services">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Services</p><h2>What I can help build.</h2></div><p class="section-text">Service cards are editable from the admin dashboard.</p></div>
+            <div class="grid-2">{% for service in services %}<article class="flow-panel reveal"><h3>{{ service.service_name }}</h3><p>{{ service.description }}</p></article>{% endfor %}</div>
+        </div>
+    </section>
+
+    <section class="section alt" id="contact">
+        <div class="section-pulse"></div>
+        <div class="wrap">
+            <div class="section-head reveal"><div><p class="section-label">Contact</p><h2>Ready for recruiter conversations.</h2></div><p class="section-text">The fastest ways to reach me for Software Engineer, Backend Developer, or Python Developer opportunities.</p></div>
+            <div class="contact-layout">
+                <article class="contact-card reveal"><h3>Contact Details</h3><ul class="info-list"><li><strong>Email</strong><span>{{ profile.contact_email }}</span></li><li><strong>Phone</strong><span>{{ profile.phone_number }}</span></li><li><strong>Address</strong><span>{{ profile.address }}</span></li><li><strong>Hours</strong><span>{{ profile.working_hours }}</span></li></ul></article>
+                <form class="contact-card contact-form reveal" id="contact-form" method="post" action="/contact"><div class="field"><label for="name">Name</label><input id="name" name="name" type="text" placeholder="Recruiter name" required></div><div class="field"><label for="email">Email</label><input id="email" name="email" type="email" placeholder="recruiter@example.com" required></div><div class="field"><label for="message">Message</label><textarea id="message" name="message" placeholder="Tell me about the opportunity" required></textarea></div><button class="btn btn-primary" type="submit">Send Message</button><p class="form-note" id="form-note">Message captured.</p></form>
+            </div>
+        </div>
+    </section>
+</main>
+<footer><div class="wrap footer-row"><span>{{ profile.footer_information }}</span><span>{{ profile.location }} | {{ profile.contact_email }}</span></div></footer>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<div class="admin-topbar"><div><h1>{{ title }}</h1><p>{{ resource.label }} content editor</p></div><a class="btn" href="/admin/{{ resource.slug }}">Back</a></div>
+<section class="admin-panel">
+        <form class="admin-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            {% for field in resource.fields %}
+        <div class="field {% if field.wide %}wide{% endif %}">
+            {% set value = item|attr(field.name) if item else "" %}
+            {% if field.kind == "checkbox" %}
+            <label class="check-field"><input name="{{ field.name }}" type="checkbox" {% if value or not item %}checked{% endif %}> {{ field.label }}</label>
+            {% elif field.kind == "textarea" %}
+            <label for="{{ field.name }}">{{ field.label }}</label><textarea id="{{ field.name }}" name="{{ field.name }}" {% if field.required %}required{% endif %}>{{ value or "" }}</textarea>
+            {% elif field.kind == "file" %}
+            <label for="{{ field.name }}">{{ field.label }}</label><input id="{{ field.name }}" name="{{ field.name }}" type="file">{% if value %}<small>Current: <a href="{{ value }}" target="_blank">{{ value }}</a></small>{% endif %}
+            {% else %}
+            <label for="{{ field.name }}">{{ field.label }}</label><input id="{{ field.name }}" name="{{ field.name }}" type="{{ field.kind }}" value="{{ value or "" }}" {% if field.required %}required{% endif %}>
+            {% endif %}
+        </div>
+        {% endfor %}
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Save</button><a class="btn" href="/admin/{{ resource.slug }}">Cancel</a></div>
+    </form>
+</section>
+{% endblock %}

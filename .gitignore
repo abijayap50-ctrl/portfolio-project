@@ -1,0 +1,13 @@
+.venv/
+env2/
+__pycache__/
+*.pyc
+portfolio.db
+server-out.log
+server-err.log
+.env
+.agents/
+.ipynb_checkpoints/
+*.db
+.idea/
+.vscode/

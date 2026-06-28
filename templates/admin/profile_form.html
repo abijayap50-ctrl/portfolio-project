@@ -1,0 +1,17 @@
+{% extends "admin/base.html" %}
+{% block content %}
+<div class="admin-topbar"><div><h1>Profile, Hero, Contact</h1><p>Update the global website information and hero section.</p></div><a class="btn" href="/admin">Back</a></div>
+<section class="admin-panel">
+        <form class="admin-form" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}">
+            {% for field in fields %}
+        {% set wide = field in ["hero_description", "about_content", "about_me", "biography", "personal_details", "education_summary", "career_summary"] %}
+        <div class="field {% if wide %}wide{% endif %}"><label for="{{ field }}">{{ field.replace("_", " ").title() }}</label>{% if wide %}<textarea id="{{ field }}" name="{{ field }}">{{ profile|attr(field) or "" }}</textarea>{% else %}<input id="{{ field }}" name="{{ field }}" value="{{ profile|attr(field) or "" }}">{% endif %}</div>
+        {% endfor %}
+        {% for file_field in ["profile_photo", "resume_pdf", "portfolio_logo", "hero_background_image", "hero_profile_image"] %}
+        <div class="field"><label for="{{ file_field }}">{{ file_field.replace("_", " ").title() }}</label><input id="{{ file_field }}" name="{{ file_field }}" type="file">{% if profile|attr(file_field) %}<small>Current: <a href="{{ profile|attr(file_field) }}" target="_blank">{{ profile|attr(file_field) }}</a></small>{% endif %}</div>
+        {% endfor %}
+        <div class="form-actions"><button class="btn btn-primary" type="submit">Save Profile</button></div>
+    </form>
+</section>
+{% endblock %}
