@@ -4,7 +4,11 @@
 <header class="site-header">
     <nav class="nav" aria-label="Main navigation">
         <a class="brand" href="#home">
+            {% if profile.portfolio_logo %}
+            <img src="{{ profile.portfolio_logo }}" alt="Logo" class="brand-logo" style="height: 44px; width: auto; border-radius: 8px; object-fit: contain;">
+            {% else %}
             <span class="brand-mark">{{ profile.full_name[:2] }}</span>
+            {% endif %}
             <span class="brand-text"><span>{{ profile.full_name }}</span><span>{{ profile.professional_title }}</span></span>
         </a>
         <div class="nav-links" id="nav-links">
@@ -34,6 +38,12 @@
                 </div>
             </div>
             <aside class="profile-panel reveal">
+                {% set avatar = profile.profile_photo or profile.hero_profile_image %}
+                {% if avatar %}
+                <div class="profile-avatar-container" style="text-align: center; margin-bottom: 20px;">
+                    <img src="{{ avatar }}" alt="{{ profile.full_name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);">
+                </div>
+                {% endif %}
                 <h2>{{ profile.full_name }}</h2>
                 <p>{{ profile.professional_title }}</p>
                 <ul class="info-list">
