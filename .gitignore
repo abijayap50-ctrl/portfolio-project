@@ -11,3 +11,5 @@ server-err.log
 *.db
 .idea/
 .vscode/
+
+.vercel

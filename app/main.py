@@ -34,7 +34,10 @@ app.include_router(api.router)
 
 @app.on_event("startup")
 def startup() -> None:
-    settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        pass
     Base.metadata.create_all(bind=engine)
     db = SessionLocal()
     try:

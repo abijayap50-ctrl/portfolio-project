@@ -81,7 +81,7 @@ async def update_profile(request: Request, db: Session = Depends(get_db), user: 
             setattr(profile, key, value)
     for upload_field in ["profile_photo", "resume_pdf", "portfolio_logo", "hero_background_image", "hero_profile_image"]:
         upload = form.get(upload_field)
-        if isinstance(upload, UploadFile) and upload.filename:
+        if hasattr(upload, "filename") and upload.filename:
             path, _, _ = save_upload(upload, "profile")
             setattr(profile, upload_field, path)
             if upload_field == "resume_pdf":
@@ -151,7 +151,7 @@ async def create_resource(resource_slug: str, request: Request, db: Session = De
     for field in resource.fields:
         if field.kind == "file":
             upload = form.get(field.name)
-            if isinstance(upload, UploadFile) and upload.filename:
+            if hasattr(upload, "filename") and upload.filename:
                 path, _, _ = save_upload(upload, field.upload_folder or resource.slug)
                 setattr(item, field.name, path)
             continue
@@ -186,7 +186,7 @@ async def update_resource(resource_slug: str, item_id: int, request: Request, db
     for field in resource.fields:
         if field.kind == "file":
             upload = form.get(field.name)
-            if isinstance(upload, UploadFile) and upload.filename:
+            if hasattr(upload, "filename") and upload.filename:
                 path, _, _ = save_upload(upload, field.upload_folder or resource.slug)
                 setattr(item, field.name, path)
             continue
