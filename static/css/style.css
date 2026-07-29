@@ -1276,6 +1276,18 @@
     gap: 8px;
 }
 
+.admin-main .btn:not(.btn-primary) {
+    color: #334155;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+}
+
+.admin-main .btn:not(.btn-primary):hover {
+    background: #e2e8f0;
+    border-color: #94a3b8;
+    color: #0f172a;
+}
+
 .admin-form {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
