@@ -40,8 +40,8 @@
             <aside class="profile-panel reveal">
                 {% set avatar = profile.profile_photo or profile.hero_profile_image %}
                 {% if avatar %}
-                <div class="profile-avatar-container" style="text-align: center; margin-bottom: 20px;">
-                    <img src="{{ avatar }}" alt="{{ profile.full_name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid rgba(255, 255, 255, 0.15); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);">
+                <div class="hexagon-border">
+                    <img src="{{ avatar }}" alt="{{ profile.full_name }}">
                 </div>
                 {% endif %}
                 <h2>{{ profile.full_name }}</h2>

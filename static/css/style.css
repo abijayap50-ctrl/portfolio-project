@@ -97,8 +97,7 @@
             border: 1px solid rgba(255, 255, 255, 0.22);
             border-radius: 8px;
             color: #fff;
-            background:
-                linear-gradient(135deg, rgba(225, 29, 72, 0.98), rgba(17, 24, 39, 0.98) 55%, rgba(103, 232, 249, 0.95));
+            background: linear-gradient(135deg, var(--red), var(--cyan));
             box-shadow: 0 14px 40px rgba(225, 29, 72, 0.3);
         }
 
@@ -342,6 +341,26 @@
             background: linear-gradient(180deg, var(--red), var(--amber), var(--cyan));
         }
 
+        .hexagon-border {
+            width: 150px;
+            height: 150px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--red), var(--cyan));
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            margin: 0 auto 20px auto;
+        }
+
+        .hexagon-border img {
+            width: 93%;
+            height: 93%;
+            object-fit: cover;
+            clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+        }
+
         .profile-panel h2 {
             margin-bottom: 6px;
             color: #fff;
@@ -574,7 +593,7 @@
             border: 1px solid var(--line);
             border-radius: 999px;
             color: #fff;
-            background: linear-gradient(135deg, var(--red), #111827 56%, var(--cyan));
+            background: linear-gradient(135deg, var(--red), var(--cyan));
             box-shadow: 0 18px 44px rgba(103, 232, 249, 0.18);
             font-weight: 950;
 
@@ -704,7 +723,7 @@
             border-radius: 26px 0 0 26px;
             color: #fff;
             background:
-                linear-gradient(135deg, rgba(225, 29, 72, 0.92), rgba(15, 23, 42, 0.84) 56%, rgba(103, 232, 249, 0.8)),
+                linear-gradient(135deg, rgba(225, 29, 72, 0.92), rgba(103, 232, 249, 0.82)),
                 linear-gradient(45deg, transparent 0 62%, rgba(255, 255, 255, 0.16) 62% 100%);
             font-weight: 950;
             text-align: center;
@@ -733,7 +752,7 @@
             border: 1px solid var(--line);
             border-radius: 999px;
             color: #fff;
-            background: linear-gradient(135deg, var(--red), #111827 58%, var(--cyan));
+            background: linear-gradient(135deg, var(--red), var(--cyan));
             box-shadow: 0 18px 44px rgba(225, 29, 72, 0.2);
             font-weight: 950;
             transform: translateY(-50%);
@@ -771,8 +790,7 @@
             border: 1px solid var(--line);
             border-radius: 8px;
             color: #fff;
-            background:
-                linear-gradient(135deg, var(--red), #111827 58%, var(--cyan));
+            background: linear-gradient(135deg, var(--red), var(--cyan));
             font-size: 28px;
             font-weight: 950;
             text-align: center;
