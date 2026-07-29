@@ -89,7 +89,15 @@ def ensure_default_content(db: Session) -> None:
         ])
 
     if not db.query(Experience).first():
-        db.add(Experience(job_title="Add Internship", company_name="Company Name", employment_type="Internship", description="This section is ready for your internship or training details.", responsibilities="Add responsibility 1\nAdd responsibility 2\nAdd measurable impact", is_active=False))
+        db.add(Experience(
+            job_title="Full Stack Web Development Intern",
+            company_name="TapAcademy",
+            employment_type="Internship",
+            start_date=date(2026, 6, 1),
+            is_active=True,
+            description="Currently pursuing a Full Stack Web Development internship, where I am learning to build and develop web applications using modern technologies. I am improving my Python programming and SQL database skills through practical projects and gaining exposure to Agentic AI concepts such as LLMs, prompt engineering, and AI agents. I also use Git/GitHub for version control and follow best coding practices while working on real-world applications.",
+            responsibilities="Python\nPython and Django Developer\nSQL\nSQLAlchemy\nORM"
+        ))
 
     if not db.query(Achievement).first():
         db.add_all([
@@ -106,7 +114,7 @@ def ensure_default_content(db: Session) -> None:
     if not db.query(SocialLink).first():
         db.add_all([
             SocialLink(platform="LinkedIn", url="https://linkedin.com/in/abijay-ap-2004", display_order=1),
-            SocialLink(platform="GitHub", url="#", display_order=2),
+            SocialLink(platform="GitHub", url="https://github.com/abijayap50-ctrl/portfolio-project", display_order=2),
         ])
 
     if not db.query(Testimonial).first():
