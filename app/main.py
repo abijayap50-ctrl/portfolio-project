@@ -32,8 +32,21 @@ app.include_router(admin.router)
 app.include_router(api.router)
 
 
+import os
+import shutil
+from pathlib import Path
+
 @app.on_event("startup")
 def startup() -> None:
+    if os.getenv("VERCEL"):
+        bundled_db = settings.BASE_DIR / "portfolio.db"
+        tmp_db = Path("/tmp/portfolio.db")
+        if bundled_db.exists() and not tmp_db.exists():
+            try:
+                shutil.copy2(bundled_db, tmp_db)
+            except Exception:
+                pass
+
     try:
         settings.UPLOAD_DIR.mkdir(parents=True, exist_ok=True)
     except OSError:
